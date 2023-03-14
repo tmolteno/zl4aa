@@ -1,4 +1,6 @@
-# ZL4AA
+# ZL4AA Radio Projects
+
+Author: Tim Molteno (ZL4TCM)
 
 Some very basic radios, developed as a way to learn about radio.
 
