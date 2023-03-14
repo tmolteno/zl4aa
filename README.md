@@ -13,10 +13,14 @@ made by Nanjing Qinheng Microelectronics Co.
 * Single cycle multiply and hardware division (FPU)
 * 64K SRAM
 * 4 Op Amps
-* 2 x 12-bit DAC !MHz
+* 2 x 12-bit DAC !MHz (Dual Channel Mode available for Baseband)
 * 2 x 12-bit ADC 1MHz
 
+Reference manual (http://www.wch-ic.com/downloads/CH32FV2x_V3xRM_PDF.html)
+
 ### IMAFC
+
+Set of RISC-V instruction extensions.
 
 Integer (M) multiply and divide.
 Atomic (A) instructions
