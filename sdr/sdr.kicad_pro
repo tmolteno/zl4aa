@@ -439,6 +439,10 @@
     [
       "54eba814-9a15-4896-a734-b24a06ae9330",
       "Audio Output"
+    ],
+    [
+      "ad7b2242-3b39-40b3-b2e9-d6ea800dea9e",
+      "CPU"
     ]
   ],
   "text_variables": {}
