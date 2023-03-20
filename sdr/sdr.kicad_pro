@@ -45,7 +45,7 @@
         "silk_text_upright": false,
         "zones": {
           "45_degree_only": false,
-          "min_clearance": 0.508
+          "min_clearance": 0.19999999999999998
         }
       },
       "diff_pair_dimensions": [
@@ -443,6 +443,14 @@
     [
       "ad7b2242-3b39-40b3-b2e9-d6ea800dea9e",
       "CPU"
+    ],
+    [
+      "cebbb4d4-df0b-4a29-b2b2-0c76d3bf10e4",
+      "Mixer I"
+    ],
+    [
+      "ae3469ea-e61f-4c82-bce0-cc247848c762",
+      "Mixer Q"
     ]
   ],
   "text_variables": {}
