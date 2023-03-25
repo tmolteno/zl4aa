@@ -45,7 +45,7 @@
         "silk_text_upright": false,
         "zones": {
           "45_degree_only": false,
-          "min_clearance": 0.19999999999999998
+          "min_clearance": 0.15
         }
       },
       "diff_pair_dimensions": [
@@ -120,6 +120,7 @@
       },
       "track_widths": [
         0.0,
+        0.175,
         0.5
       ],
       "via_dimensions": [
@@ -354,7 +355,7 @@
     "classes": [
       {
         "bus_width": 12.0,
-        "clearance": 0.2,
+        "clearance": 0.15,
         "diff_pair_gap": 0.25,
         "diff_pair_via_gap": 0.25,
         "diff_pair_width": 0.2,
@@ -365,30 +366,8 @@
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.25,
-        "via_diameter": 0.8,
-        "via_drill": 0.4,
-        "wire_width": 6.0
-      },
-      {
-        "bus_width": 12.0,
-        "clearance": 0.2,
-        "diff_pair_gap": 0.25,
-        "diff_pair_via_gap": 0.25,
-        "diff_pair_width": 0.2,
-        "line_style": 0,
-        "microvia_diameter": 0.3,
-        "microvia_drill": 0.1,
-        "name": "Power",
-        "nets": [
-          "+3.3V",
-          "+5V",
-          "GND"
-        ],
-        "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 0.5,
-        "via_diameter": 1.0,
-        "via_drill": 0.6,
+        "via_diameter": 0.3,
+        "via_drill": 0.2,
         "wire_width": 6.0
       }
     ],
@@ -474,6 +453,14 @@
     [
       "ae3469ea-e61f-4c82-bce0-cc247848c762",
       "Mixer Q"
+    ],
+    [
+      "5adb175a-98d0-409a-bc02-3db049d84ccc",
+      "TX Amplifier"
+    ],
+    [
+      "d0348644-e03f-4f7e-9ac7-cca0c2557a05",
+      "Tx Mixers"
     ]
   ],
   "text_variables": {}
