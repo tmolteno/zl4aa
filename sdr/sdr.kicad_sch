@@ -1442,6 +1442,24 @@
     (path "/d0348644-e03f-4f7e-9ac7-cca0c2557a05/5edc799b-6342-408e-bd36-5a09313ded43"
       (reference "U10") (unit 5) (value "74HCT00") (footprint "")
     )
+    (path "/cebbb4d4-df0b-4a29-b2b2-0c76d3bf10e4/017a846f-d339-43d7-a614-add705b94224"
+      (reference "U?") (unit 1) (value "NC7SB3157L6X") (footprint "Package_SON:Fairchild_MicroPak-6_1.0x1.45mm_P0.5mm")
+    )
+    (path "/ae3469ea-e61f-4c82-bce0-cc247848c762/017a846f-d339-43d7-a614-add705b94224"
+      (reference "U?") (unit 1) (value "NC7SB3157L6X") (footprint "Package_SON:Fairchild_MicroPak-6_1.0x1.45mm_P0.5mm")
+    )
+    (path "/cebbb4d4-df0b-4a29-b2b2-0c76d3bf10e4/3cf5fb22-d28e-47d0-a78f-6a8ed4e584c8"
+      (reference "U?") (unit 1) (value "74LVC1G66") (footprint "")
+    )
+    (path "/ae3469ea-e61f-4c82-bce0-cc247848c762/3cf5fb22-d28e-47d0-a78f-6a8ed4e584c8"
+      (reference "U?") (unit 1) (value "74LVC1G66") (footprint "")
+    )
+    (path "/cebbb4d4-df0b-4a29-b2b2-0c76d3bf10e4/ad269f27-1aea-421a-9b38-79ed9cf0a6c4"
+      (reference "U?") (unit 2) (value "NC7SB3157L6X") (footprint "Package_SON:Fairchild_MicroPak-6_1.0x1.45mm_P0.5mm")
+    )
+    (path "/ae3469ea-e61f-4c82-bce0-cc247848c762/ad269f27-1aea-421a-9b38-79ed9cf0a6c4"
+      (reference "U?") (unit 2) (value "NC7SB3157L6X") (footprint "Package_SON:Fairchild_MicroPak-6_1.0x1.45mm_P0.5mm")
+    )
     (path "/f84f6323-5d0a-4b98-9173-b3e9afa6c9a5/3fee64eb-3ef4-4c83-8d5f-ba65813cd0ca"
       (reference "Y1") (unit 1) (value "25MHz") (footprint "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm")
     )
