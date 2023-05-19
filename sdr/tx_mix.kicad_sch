@@ -6,10 +6,10 @@
 
   (lib_symbols
     (symbol "74xGxx:74LVC1G66" (in_bom yes) (on_board yes)
-      (property "Reference" "U" (at -2.54 5.08 0)
+      (property "Reference" "U" (at 2.54 7.62 0)
         (effects (font (size 1.27 1.27)))
       )
-      (property "Value" "74LVC1G66" (at 0 -5.08 0)
+      (property "Value" "74LVC1G66" (at 7.62 -7.62 0)
         (effects (font (size 1.27 1.27)))
       )
       (property "Footprint" "" (at 0 0 0)
@@ -17,6 +17,9 @@
       )
       (property "Datasheet" "http://www.ti.com/lit/ds/symlink/sn74lvc1g66.pdf" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_locked" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)))
       )
       (property "ki_keywords" "Single Bilateral Analog Switch" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -27,105 +30,83 @@
       (property "ki_fp_filters" "SOT* SC*" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (symbol "74LVC1G66_0_1"
-        (circle (center -3.556 -3.81) (radius 0.127)
-          (stroke (width 0) (type default))
+      (symbol "74LVC1G66_1_1"
+        (polyline
+          (pts
+            (xy -7.62 0)
+            (xy -3.81 0)
+          )
+          (stroke (width 0.1524) (type default))
+          (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy -7.62 -7.62)
+            (xy 0 -7.62)
+            (xy 0 -1.905)
+          )
+          (stroke (width 0.1524) (type default))
+          (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy -7.62 -7.62)
+            (xy -7.62 5.715)
+            (xy 0 5.715)
+            (xy 0 3.175)
+          )
+          (stroke (width 0.1524) (type default))
           (fill (type none))
         )
         (polyline
           (pts
             (xy -3.81 0)
-            (xy -2.54 0)
+            (xy 3.81 3.81)
+            (xy 3.81 -3.81)
+            (xy -3.81 0)
           )
-          (stroke (width 0) (type default))
+          (stroke (width 0.1524) (type default))
           (fill (type none))
         )
         (polyline
           (pts
-            (xy -2.54 2.54)
-            (xy -2.54 -2.54)
-          )
-          (stroke (width 0.254) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy 2.54 0)
-            (xy 3.81 0)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy 2.54 2.54)
-            (xy 2.54 -2.54)
-          )
-          (stroke (width 0.254) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
+            (xy -3.81 3.81)
             (xy -3.81 -3.81)
-            (xy 0 -3.81)
-            (xy 0 -1.27)
+            (xy 3.81 0)
+            (xy -3.81 3.81)
           )
-          (stroke (width 0) (type default))
+          (stroke (width 0.1524) (type default))
           (fill (type none))
         )
-        (polyline
-          (pts
-            (xy -2.54 -2.54)
-            (xy 2.54 0)
-            (xy -2.54 2.54)
-          )
-          (stroke (width 0.254) (type default))
+        (circle (center 0 2.54) (radius 0.635)
+          (stroke (width 0.1524) (type default))
           (fill (type none))
         )
-        (polyline
-          (pts
-            (xy 2.54 2.54)
-            (xy -2.54 0)
-            (xy 2.54 -2.54)
-          )
-          (stroke (width 0.254) (type default))
-          (fill (type none))
+        (pin bidirectional line (at -12.7 0 0) (length 5.08)
+          (name "~" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
         )
-        (polyline
-          (pts
-            (xy 0 2.159)
-            (xy 0 3.302)
-            (xy -3.556 3.302)
-            (xy -3.556 -3.81)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
+        (pin bidirectional line (at 10.16 0 180) (length 6.25)
+          (name "~" (effects (font (size 1.27 1.27))))
+          (number "2" (effects (font (size 1.27 1.27))))
         )
-        (circle (center 0 1.778) (radius 0.381)
-          (stroke (width 0.254) (type default))
-          (fill (type none))
+        (pin input line (at -12.7 -7.62 0) (length 5.08)
+          (name "~" (effects (font (size 1.27 1.27))))
+          (number "4" (effects (font (size 1.27 1.27))))
         )
       )
-      (symbol "74LVC1G66_1_1"
-        (pin bidirectional line (at -6.35 0 0) (length 2.54)
-          (name "~" (effects (font (size 1.016 1.016))))
-          (number "1" (effects (font (size 1.016 1.016))))
+      (symbol "74LVC1G66_2_1"
+        (rectangle (start -5.08 5.08) (end 5.08 -5.08)
+          (stroke (width 0.254) (type default))
+          (fill (type background))
         )
-        (pin bidirectional line (at 6.35 0 180) (length 2.54)
-          (name "~" (effects (font (size 1.016 1.016))))
-          (number "2" (effects (font (size 1.016 1.016))))
+        (pin power_in line (at 0 -10.16 90) (length 5.08)
+          (name "GND" (effects (font (size 1.27 1.27))))
+          (number "3" (effects (font (size 1.27 1.27))))
         )
-        (pin power_in line (at 1.27 -3.81 270) (length 0) hide
-          (name "GND" (effects (font (size 1.016 1.016))))
-          (number "3" (effects (font (size 1.016 1.016))))
-        )
-        (pin input line (at -6.35 -3.81 0) (length 2.54)
-          (name "~" (effects (font (size 1.016 1.016))))
-          (number "4" (effects (font (size 1.016 1.016))))
-        )
-        (pin power_in line (at 1.27 3.81 90) (length 0) hide
-          (name "VCC" (effects (font (size 1.016 1.016))))
-          (number "5" (effects (font (size 1.016 1.016))))
+        (pin power_in line (at 0 10.16 270) (length 5.08)
+          (name "VCC" (effects (font (size 1.27 1.27))))
+          (number "5" (effects (font (size 1.27 1.27))))
         )
       )
     )
@@ -450,8 +431,8 @@
     )
     (pin "1" (uuid 72a6e77a-093b-4778-8e53-05befca0a704))
     (pin "2" (uuid 3fcaae30-5af6-4eea-941a-bc23bc1a90ec))
-    (pin "3" (uuid ef8b4d0b-9b8b-4951-97f5-e0406f9c2a82))
     (pin "4" (uuid fc74a2db-8be7-4563-ab0c-b9bc2a9869f8))
+    (pin "3" (uuid ef8b4d0b-9b8b-4951-97f5-e0406f9c2a82))
     (pin "5" (uuid f8cad889-4b9d-4730-9d98-6847d448d025))
     (instances
       (project "sdr"
@@ -479,8 +460,8 @@
     )
     (pin "1" (uuid 66a2c8f9-3375-407d-9574-224473e90991))
     (pin "2" (uuid 80f40590-69f5-4d10-b185-88c37f236943))
-    (pin "3" (uuid f5b5fb00-354f-49fb-9206-aac0e6dfa061))
     (pin "4" (uuid 98749e2e-08d0-4de8-93a8-049af0e9c0b7))
+    (pin "3" (uuid f5b5fb00-354f-49fb-9206-aac0e6dfa061))
     (pin "5" (uuid a798b1b2-d1f2-46b5-a2ef-1a4f6768dad3))
     (instances
       (project "sdr"
@@ -822,8 +803,8 @@
     )
     (pin "1" (uuid f74675a9-2770-4ef3-8218-3c49835f2295))
     (pin "2" (uuid 07a427a5-98d8-4def-9e60-655b8b079f85))
-    (pin "3" (uuid 7dbda5a3-ea9b-4573-ab58-adbc23041783))
     (pin "4" (uuid 90648616-e523-4fe8-a389-cec12272e1e1))
+    (pin "3" (uuid 7dbda5a3-ea9b-4573-ab58-adbc23041783))
     (pin "5" (uuid 274fc542-16c0-4bfa-999b-70a3d97174c3))
     (instances
       (project "sdr"
