@@ -52,13 +52,15 @@ void SYnthesizer_Init(u32 bound, u16 address)
     I2C_InitStructure.I2C_ClockSpeed = bound;
     I2C_InitStructure.I2C_Mode = I2C_Mode_I2C;
     I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;
-    I2C_InitStructure.I2C_OwnAddress1 = address;
+    I2C_InitStructure.I2C_OwnAddress1 = 0x77; // Unimportant Init
     I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
     I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
     I2C_Init(I2C1, &I2C_InitStructure);
 
     I2C_Cmd(I2C1, ENABLE);
     I2C_AcknowledgeConfig(I2C1, ENABLE);
+
+    while( I2C_GetFlagStatus( I2C1, I2C_FLAG_BUSY ) != RESET );
 }
 
 
@@ -67,7 +69,7 @@ void I2C_StartTx(u8 slave_address) {
 	I2C_GenerateSTART(I2C1, ENABLE);
 	while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_MODE_SELECT));
 
-	I2C_Send7bitAddress( I2C1, slave_address, I2C_Direction_Transmitter );
+	I2C_Send7bitAddress( I2C1, slave_address << 1, I2C_Direction_Transmitter );
 
     while( !I2C_CheckEvent( I2C1, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED ) );
 }
@@ -77,7 +79,7 @@ void I2C_StartRx(u8 slave_address) {
 	I2C_GenerateSTART(I2C1, ENABLE);
 	while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_MODE_SELECT));
 
-	I2C_Send7bitAddress( I2C1, slave_address, I2C_Direction_Receiver );
+	I2C_Send7bitAddress( I2C1, slave_address << 1, I2C_Direction_Receiver );
 
 	while( !I2C_CheckEvent( I2C1, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED ) );
 }
@@ -138,7 +140,7 @@ int main(void)
 	LED_Init();
 
 #if 1
-	SYnthesizer_Init(50000, 0x77);
+	SYnthesizer_Init(100000, 0x77);
 	/* Si5351 Step 1: Disable Outputs */
 	Si5351_WriteRegister(3, 0xFF);
 	
