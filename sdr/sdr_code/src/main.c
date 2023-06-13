@@ -130,7 +130,40 @@ void Si5351_WriteRegister(u8 reg, u8 data) {
     I2C_GenerateSTOP( I2C1, ENABLE );
 }
 
+void Si5351_SetFrequency(float frequency) {
+	/* 
+		Step 1: Disable Outputs
+		Step 2: Set PLLA to desired frequency
+		Step 3: Set CLK0 to use PLLA
+		Step 4: Enable CLK0
+		Step 5: Enable Outputs
 
+		https://www.skyworksinc.com/-/media/Skyworks/SL/documents/public/application-notes/AN619.pdf
+		https://github.com/MR-DOS/Si5351-lib/blob/master/src/si5351.c
+	*/
+
+	/* Step 1: Disable Outputs */
+	Si5351_WriteRegister(3, 0xFF);
+
+	/* Step 2: Set PLLA to desired frequency */
+	/* 
+		PLLA = 20MHz * (a + b/c)
+		Where a = 24, b = 0, c = 1
+		PLLA = 480MHz
+	*/
+	Si5351_WriteRegister(26, 0x00);
+	Si5351_WriteRegister(27, 0x00);
+	Si5351_WriteRegister(28, 0x00);
+
+
+	/* Step 3: Set CLK0 to use PLLA */
+	
+	/* Step 4: Enable CLK0 */
+	
+	
+	/* Step 5: Enable Outputs */
+	Si5351_WriteRegister(3, 0x00);
+}
 int main(void)
 {
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
