@@ -144,26 +144,31 @@ void Si5351_SetFrequency(float frequency) {
 
 	/* Step 1: Disable Outputs */
 	Si5351_WriteRegister(3, 0xFF);
+	Si5351_WriteRegister(9, 0xFF);
 
-	/* Step 2: Set PLLA to desired frequency */
-	/* 
-		PLLA = 20MHz * (a + b/c)
-		Where a = 24, b = 0, c = 1
-		PLLA = 480MHz
-	*/
-	Si5351_WriteRegister(26, 0x00);
-	Si5351_WriteRegister(27, 0x00);
-	Si5351_WriteRegister(28, 0x00);
+	/* Powerdown all output drivers: Reg. 16, 17, 18, 19, 20, 21, 22, 23 = 0x80 */
+	for (int clk=0; clk<=7; clk++) {
+		Si5351_WriteRegister(16 + clk, 0x80);
+	}
+	/* Set Interrupt Masks Reg 2:  Unused on The Si5351A */
+
+	/* Set CLK0 to use PLLA */
+	Si5351_WriteRegister(15, 0x00); // Use XTAL as PLL clock source
+
+	/* Write configuration map of all registers */
 
 
-	/* Step 3: Set CLK0 to use PLLA */
+
 	
-	/* Step 4: Enable CLK0 */
+	/* Soft Reset PLLA and PLLB */
 	
+	Si5351_WriteRegister(177, 0xAC);
 	
-	/* Step 5: Enable Outputs */
-	Si5351_WriteRegister(3, 0x00);
+	/* Enable CLK0 and CLK1 */
+	Si5351_WriteRegister(3, 0b11111100);
 }
+
+
 int main(void)
 {
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
@@ -174,31 +179,11 @@ int main(void)
 
 #if 1
 	SYnthesizer_Init(100000, 0x77);
-	/* Si5351 Step 1: Disable Outputs */
-	Si5351_WriteRegister(3, 0xFF);
-	
-	/* Powerdown all output drivers: Reg. 16, 17, 18, 19, 20, 21, 22, 23 = 0x80 */
-	Si5351_WriteRegister(16, 0x80);
-	Si5351_WriteRegister(17, 0x80);
-	Si5351_WriteRegister(18, 0x80);
-	Si5351_WriteRegister(19, 0x80);
-	Si5351_WriteRegister(20, 0x80);
-	Si5351_WriteRegister(21, 0x80);
-	Si5351_WriteRegister(22, 0x80);
-	Si5351_WriteRegister(23, 0x80);
-
-	/* Set Interrupt Masks Reg 2:  Unused on The Si5351A */
 
 	/* Set Crystal Load Capacitance */
 	Si5351_WriteRegister(183, 0xC0); // 10pF
 
-	/* See AN619 about setting up PLL's. 
-		Quadrature requires an even multiple of the output frequency to be the PLL frequency
-		The PLL frequency must be between 600 and 900 MHz 
-		
-		if f = 50 MHz, then PLL = 800 MHz (x16), and the output frequency is 50 MHz.
-		The delay register must therefore be set to 16, to get the quadrature output on the second clock.
-	*/
+
 #endif
 	uint8_t ledState = 0;
 	while (1)
