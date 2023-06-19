@@ -10,14 +10,19 @@
 
 #define DAC_I_PIN GPIO_Pin_4
 #define DAC_Q_PIN GPIO_Pin_5
-#define AUDIO_ENABLE_PIN GPIO_Pin_6
+#define AUDIO_SHUTDOWN_PIN GPIO_Pin_6
 
 #define DAC_I_PORT GPIOA
 #define DAC_Q_PORT GPIOA
-#define AUDIO_ENABLE_PORT GPIOA
+#define AUDIO_SHUTDOWN_PORT GPIOA
 
-void LED_Init(void);
+void GPIO_Pins_Init(void);
 void DAC_Initialize(void);
-void DAC_DMA_Init(u16* dacbuff16bit_ptr);
+void DAC_DMA_Init(u16* dacbuff16bit_ptr, u32 buffsize);
 void Synthesizer_Init(u32 bound, u16 address);
+
+
+void AudioEnable(void);
+void AudioShutdown(void);
+
 #endif // __hardware_h__

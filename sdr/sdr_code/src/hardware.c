@@ -1,7 +1,9 @@
 #include <ch32v30x.h>
 #include "hardware.h"
 
- void LED_Init(void) {
+
+
+void GPIO_Pins_Init(void) {
 	GPIO_InitTypeDef GPIO_InitStructure = {0};
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
 
@@ -9,42 +11,47 @@
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(BLINKY_GPIO_PORT, &GPIO_InitStructure);
+
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+
+    /*  Note: In order to avoid parasitic interference and additional power consumption, 
+        the corresponding pins of the DAC channel need to be set to analog input (AIN) mode in advance.
+    */
+    GPIO_InitStructure.GPIO_Pin = DAC_I_PIN;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(DAC_I_PORT, &GPIO_InitStructure);
+
+    GPIO_InitStructure.GPIO_Pin = DAC_Q_PIN;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(DAC_Q_PORT, &GPIO_InitStructure);
+
+    GPIO_InitStructure.GPIO_Pin = AUDIO_SHUTDOWN_PIN;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(AUDIO_SHUTDOWN_PORT, &GPIO_InitStructure);
+
+	GPIO_SetBits(DAC_I_PORT, DAC_I_PIN);
+    AudioShutdown(); /* For the moment, shut audio down */
+}
+
+void AudioEnable(void) {
+    GPIO_WriteBit(AUDIO_SHUTDOWN_PORT, AUDIO_SHUTDOWN_PIN, Bit_RESET);
+}
+
+void AudioShutdown(void) {
+    GPIO_WriteBit(AUDIO_SHUTDOWN_PORT, AUDIO_SHUTDOWN_PIN, Bit_SET);
 }
 
 /// @brief 
 /// @param  
 void DAC_Initialize(void) {
-    GPIO_InitTypeDef GPIO_InitStructure = {0};
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
-
-    GPIO_InitStructure.GPIO_Pin = DAC_I_PIN;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(DAC_I_PORT, &GPIO_InitStructure);
-
-    GPIO_InitStructure.GPIO_Pin = DAC_Q_PIN;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(DAC_Q_PORT, &GPIO_InitStructure);
-
-    GPIO_InitStructure.GPIO_Pin = AUDIO_ENABLE_PIN;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(AUDIO_ENABLE_PORT, &GPIO_InitStructure);
-
     // Now enable the DAC for audio and baseband
-    GPIO_WriteBit(AUDIO_ENABLE_PORT, AUDIO_ENABLE_PIN, Bit_SET);
-    
+
     DAC_InitTypeDef  DAC_InitType = {0};
 
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE);
-
-	GPIO_InitStructure.GPIO_Pin = DAC_I_PIN;
- 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
- 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
- 	GPIO_Init(DAC_I_PORT, &GPIO_InitStructure);
-	GPIO_SetBits(DAC_I_PORT, DAC_I_PIN);
-
 	DAC_InitType.DAC_Trigger=DAC_Trigger_T8_TRGO;
 	DAC_InitType.DAC_WaveGeneration=DAC_WaveGeneration_None;
 	DAC_InitType.DAC_OutputBuffer=DAC_OutputBuffer_Disable ;
@@ -56,7 +63,7 @@ void DAC_Initialize(void) {
 
 
 
-void DAC_DMA_Init(u16* dacbuff16bit_ptr) {
+void DAC_DMA_Init(u16* dacbuff16bit_ptr, u32 buffsize) {
     // Now initialize the DMA
     DMA_InitTypeDef DMA_InitStructure={0};
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA2, ENABLE);
@@ -66,7 +73,7 @@ void DAC_DMA_Init(u16* dacbuff16bit_ptr) {
     DMA_InitStructure.DMA_PeripheralBaseAddr = (u32)&(DAC->R12BDHR1);
     DMA_InitStructure.DMA_MemoryBaseAddr = (u32)dacbuff16bit_ptr;
     DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralDST;
-    DMA_InitStructure.DMA_BufferSize = 8;
+    DMA_InitStructure.DMA_BufferSize = buffsize;
     DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
     DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
     DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
