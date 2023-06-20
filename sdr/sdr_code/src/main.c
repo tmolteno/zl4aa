@@ -1,9 +1,10 @@
 #include <ch32v30x.h>
 #include <debug.h>
-
+#include "tiny_invaders.h"
 #include "hardware.h"
 #include "Si5351.h"
-
+#include "oled_min.h"
+#include "splash_screen.h"
 void NMI_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void HardFault_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void EXTI9_5_IRQHandler(void)  __attribute__((interrupt(/*"WCH-Interrupt-fast"*/)));
@@ -12,45 +13,25 @@ void Delay_Init(void);
 void Delay_Ms(uint32_t n);
 
 
-
-/*********************************************************************
- * @fn      TIM8_Init
- *
- * @brief   Initializes TIM3 collection.
- *
- * @param   arr - TIM_Period
- *          psc - TIM_Prescaler
- *
- * @return  none
- */
-void TIM8_Init(u16 arr,u16 psc)
-{
-    TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure={0};
-
-    RCC_APB2PeriphClockCmd( RCC_APB2Periph_TIM8, ENABLE );
-
-    TIM_TimeBaseInitStructure.TIM_Period = arr;
-    TIM_TimeBaseInitStructure.TIM_Prescaler = psc;
-    TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
-    TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Down;
-    TIM_TimeBaseInitStructure.TIM_RepetitionCounter =  0x00;
-    TIM_TimeBaseInit( TIM8, &TIM_TimeBaseInitStructure);
-
-	TIM_SelectOutputTrigger(TIM8, TIM_TRGOSource_Update);
-	TIM_Cmd(TIM8, ENABLE);
-}
-
 void KEY_Interrupt_Init(void) {
 
     GPIO_InitTypeDef GPIO_InitStructure = {0};
     EXTI_InitTypeDef EXTI_InitStructure = {0};
     NVIC_InitTypeDef NVIC_InitStructure = {0};
 
+	/* PB9 'MODE' Key */
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO | RCC_APB2Periph_GPIOB, ENABLE);
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOB, &GPIO_InitStructure);
+	
+	/* PC8 PTT Key */
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOC, &GPIO_InitStructure);
 
     GPIO_EXTILineConfig(GPIO_PortSourceGPIOB, GPIO_PinSource9);
 
@@ -67,14 +48,7 @@ void KEY_Interrupt_Init(void) {
     NVIC_Init(&NVIC_InitStructure);
 }
 
-
-enum STATE {
-	STATE_IDLE = 0,
-	STATE_SENDING,
-	STATE_RECEIVING,
-	STATE_ERROR
-};
-
+#include "state.h"
 
 volatile u8 current_state = STATE_IDLE;
 volatile u8 next_state = STATE_IDLE;
@@ -100,15 +74,38 @@ int main(void)
 	AudioEnable();
 
 	DAC_DMA_Init(&DAC_Value[0], N_SAMPLES);
-	TIM8_Init(0x7,48000-1);
+	DAC_Timer_Init(0x7,48000-1);
+
+
 	Synthesizer_Init(100000, 0x77);
 
     KEY_Interrupt_Init();
 
+	OLED_I2C_init();
+
+	OLED_fill(0xFF); // Clear Screen when entering idle state.
+	OLED_draw_xbm(&splash_screen_bits[0]);
+
+	// tiny_invaders();
+
 	uint8_t ledState = 0;
 	while (1)
 	{
-		current_state = next_state;
+		if (current_state != next_state) {
+			switch (next_state) {
+				case STATE_IDLE:
+					OLED_fill(0); // Clear Screen when entering idle state.
+					break;
+				case STATE_SENDING:
+					break;
+				case STATE_RECEIVING:
+					break;
+				case STATE_GAME:
+					tiny_invaders();
+					break;
+			}
+			current_state = next_state;
+		}
 		switch (current_state) {
 			case STATE_IDLE:
 				GPIO_WriteBit(BLINKY_GPIO_PORT, BLINKY_GPIO_PIN, ledState);
@@ -122,7 +119,7 @@ int main(void)
 				break;
 			case STATE_RECEIVING:
 				break;
-			case STATE_ERROR:
+			case STATE_GAME:
 				break;
 		}
 	}
@@ -147,7 +144,7 @@ void HardFault_Handler(void)
  */
 void EXTI9_5_IRQHandler(void)
 {
-  	//if(EXTI_GetITStatus(EXTI_Line9) != RESET)
+  	if(EXTI_GetITStatus(EXTI_Line9) != RESET)
     {
 		switch (current_state) {
 			case STATE_IDLE:
@@ -157,10 +154,10 @@ void EXTI9_5_IRQHandler(void)
 				next_state = STATE_RECEIVING;
 				break;
 			case STATE_RECEIVING:
-				next_state = STATE_IDLE;
+				next_state = STATE_GAME;
 				break;
-			case STATE_ERROR:
-				next_state = STATE_ERROR;
+			case STATE_GAME:
+				next_state = STATE_IDLE;
 				break;
 		}
         EXTI_ClearITPendingBit(EXTI_Line9); /* Clear Flag */

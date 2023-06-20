@@ -18,6 +18,8 @@
 
 void GPIO_Pins_Init(void);
 void DAC_Initialize(void);
+void DAC_Timer_Init(u16 arr,u16 psc);
+
 void DAC_DMA_Init(u16* dacbuff16bit_ptr, u32 buffsize);
 void Synthesizer_Init(u32 bound, u16 address);
 

@@ -63,6 +63,36 @@ void DAC_Initialize(void) {
 
 
 
+/*********************************************************************
+ * @fn      TIM8_Init
+ *
+ * @brief   Initializes TIM8 timer used by the DAC trigger.
+ *
+ * @param   arr - TIM_Period
+ *          psc - TIM_Prescaler
+ *
+ * @return  none
+ */
+void DAC_Timer_Init(u16 arr,u16 psc)
+{
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure={0};
+
+    RCC_APB2PeriphClockCmd( RCC_APB2Periph_TIM8, ENABLE );
+
+    TIM_TimeBaseInitStructure.TIM_Period = arr;
+    TIM_TimeBaseInitStructure.TIM_Prescaler = psc;
+    TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+    TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Down;
+    TIM_TimeBaseInitStructure.TIM_RepetitionCounter =  0x00;
+    TIM_TimeBaseInit( TIM8, &TIM_TimeBaseInitStructure);
+
+	TIM_SelectOutputTrigger(TIM8, TIM_TRGOSource_Update);
+	TIM_Cmd(TIM8, ENABLE);
+}
+
+
+
+
 void DAC_DMA_Init(u16* dacbuff16bit_ptr, u32 buffsize) {
     // Now initialize the DMA
     DMA_InitTypeDef DMA_InitStructure={0};
