@@ -1,4 +1,8 @@
-// These are stored as vertical - one bit per pixel
+// These are stored as vertical - one bit per pixel 
+// Converted here ... (https://mischianti.org/images-to-byte-array-online-converter-cpp-arduino/)
+//
+// TODO Use horizontal 1-bit per pixel, and rewrite the code to use that format
+
 #define splash_screen_width 128
 #define splash_screen_height 64
 static unsigned char splash_screen_bits[] = {

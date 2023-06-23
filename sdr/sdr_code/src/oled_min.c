@@ -78,11 +78,12 @@ void OLED_fill(uint8_t p) {
 
 // OLED draw bitmap
 void OLED_draw_bmp(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, const uint8_t* bmp) {
-  for(uint8_t y = y0; y < y1; y++) {
+  for(int y = y0; y < y1; y++) {
     OLED_setpos(x0, y);
     OLED_I2C_start(OLED_ADDR);
     OLED_I2C_write(OLED_DAT_MODE);
-    for(uint8_t x = x0; x < x1; x++)
+
+    for(int x = x0; x < x1; x++)
       OLED_I2C_write(*bmp++);
     OLED_I2C_stop();
   }
@@ -95,12 +96,30 @@ u8 reverse(u8 b) {
    return b;
 }
 
-void OLED_draw_xbm(const uint8_t * xbm) {
+
+/**
+ * @brief Draw an XBM image converted into 1-bit vertical mode
+*/
+void OLED_draw_xbm_vertical(const uint8_t * xbm) {
     for(int y=0; y<8; y++) {
       OLED_setpos(0,y);
       OLED_data_start();
       for(int x=0; x<128; x++) {
         OLED_I2C_write(xbm[x + (y * 128)]);
+      }
+      OLED_I2C_stop();
+    }
+}
+
+/**
+ * @brief Draw an XBM image as output by GIMP (in 1-bit horizontal mode)
+*/
+void OLED_draw_xbm(const uint8_t * xbm) {
+    for(int y=0; y<64; y++) {
+      OLED_setpos(0,y);
+      OLED_data_start();
+      for(int x=0; x<16; x++) {
+        OLED_I2C_write(xbm[x + (y * 16)]);
       }
       OLED_I2C_stop();
     }

@@ -31,7 +31,23 @@
 #include "spritebank.h"       // grafix
 #include "state.h"
 
-extern volatile u8 next_state;
+extern u8 next_state;
+
+volatile int keep_playing() {
+  if (STATE_GAME == next_state) {
+    return 1;
+  } else {
+    return 0;
+  } 
+}
+
+volatile int stop_playing() {
+  if (STATE_GAME != next_state) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
 
 // ===================================================================================
 // Global Variables
@@ -84,9 +100,6 @@ uint8_t Monster(uint8_t x, uint8_t y, SPACE *space);
 uint8_t MonsterRefreshMove(SPACE *space);
 void VarResetNewLevel(SPACE *space);
 
-inline bool keep_playing() {
-  return (STATE_GAME == next_state);
-}
 
 // ===================================================================================
 // Main Function
@@ -99,13 +112,16 @@ void tiny_invaders(void) {
 
 
   // Loop
-  while (keep_playing()) {
+  while (1) {
     uint8_t Decompte = 0;
     uint8_t VarPot;
     uint8_t MyShootReady = SHOOTS;
     SPACE space;
 
   NEWGAME:
+
+    if (stop_playing()) goto QUIT; // exit game
+
     Live = 3;
     LEVELS = 0;
     Tiny_Flip(1, &space);
@@ -128,6 +144,8 @@ void tiny_invaders(void) {
     goto Bypass;
 
   RestartLevel:
+    if (stop_playing()) goto QUIT; // exit game
+
     if(Live > 0) Live--;
     else goto NEWGAME;
 
@@ -136,7 +154,8 @@ void tiny_invaders(void) {
     Decompte = 0;
     Tiny_Flip(0, &space);
     JOY_DLY_ms(1000);
-    while(keep_playing()) {
+    while(1) {
+      if (stop_playing()) goto QUIT; // exit game
       if(MONSTERrest == 0) { 
         JOY_sound(110, 255); JOY_DLY_ms(40); JOY_sound(130, 255); JOY_DLY_ms(40);
         JOY_sound(100, 255); JOY_DLY_ms(40); JOY_sound(1, 155);   JOY_DLY_ms(20);
@@ -193,6 +212,8 @@ void tiny_invaders(void) {
     JOY_SLOWDOWN();
     }
   }
+  QUIT:
+  JOY_SLOWDOWN();
 }
 
 // ===================================================================================

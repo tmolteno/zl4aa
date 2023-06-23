@@ -68,13 +68,15 @@ int main(void)
 	SystemCoreClockUpdate();
 	Delay_Init();
 
+	Delay_Ms(1000);
+
 	GPIO_Pins_Init();
 	DAC_Initialize();
 
 	AudioEnable();
 
 	DAC_DMA_Init(&DAC_Value[0], N_SAMPLES);
-	DAC_Timer_Init(0x7,48000-1);
+	DAC_Timer_Init(0x7,24000-1);
 
 
 	Synthesizer_Init(100000, 0x77);
@@ -84,7 +86,7 @@ int main(void)
 	OLED_I2C_init();
 
 	OLED_fill(0xFF); // Clear Screen when entering idle state.
-	OLED_draw_xbm(&splash_screen_bits[0]);
+	OLED_draw_xbm_vertical(&splash_screen_bits[0]);
 
 	// tiny_invaders();
 
