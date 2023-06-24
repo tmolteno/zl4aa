@@ -25,6 +25,7 @@
 //
 // ===================================================================================
 // Modified to work with CH32V003 by Stefan Wagner: https://github.com/wagiminator
+// Tweaked to work with CH32V305 by Tim Molteno: https://github.com/tmolteno
 // ===================================================================================
 
 #include "driver.h"          // TinyJoypad conversion driver
@@ -102,7 +103,7 @@ void VarResetNewLevel(SPACE *space);
 
 
 // ===================================================================================
-// Main Function
+// Play the tiny_invaders game
 // ===================================================================================
 void tiny_invaders(void) {
   // Setup

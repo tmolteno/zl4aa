@@ -1,0 +1,18 @@
+{
+    "name": "u8g2",
+    "version": "10.2.1",
+    "keywords": "Graphics, Library",
+    "description": "It is a tiny graphics library",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/olikraus/u8g2.git"
+    },
+    "frameworks": "noneos-sdk",
+    "platforms": "ch32v",
+    "build": {
+        "libArchive": false,
+		"flags": [
+			"-Iu8g2"
+		]
+    }
+}

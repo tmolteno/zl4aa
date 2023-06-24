@@ -50,6 +50,8 @@ void KEY_Interrupt_Init(void) {
 
 #include "state.h"
 
+void u8g2_setup(void);
+
 volatile u8 current_state = STATE_IDLE;
 volatile u8 next_state = STATE_IDLE;
 
@@ -85,8 +87,9 @@ int main(void)
 
 	OLED_I2C_init();
 
-	OLED_fill(0xFF); // Clear Screen when entering idle state.
-	OLED_draw_xbm_vertical(&splash_screen_bits[0]);
+	u8g2_setup();
+	//OLED_fill(0xFF); // Clear Screen when entering idle state.
+	//OLED_draw_xbm_vertical(&splash_screen_bits[0]);
 
 	// tiny_invaders();
 
@@ -103,7 +106,7 @@ int main(void)
 				case STATE_RECEIVING:
 					break;
 				case STATE_GAME:
-					tiny_invaders();
+					//tiny_invaders();
 					break;
 			}
 			current_state = next_state;
