@@ -4,7 +4,7 @@
 #include "hardware.h"
 #include "Si5351.h"
 #include "oled_min.h"
-#include "splash_screen.h"
+#include "splash_screen.xbm"
 void NMI_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void HardFault_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void EXTI9_5_IRQHandler(void)  __attribute__((interrupt(/*"WCH-Interrupt-fast"*/)));
@@ -49,6 +49,9 @@ void KEY_Interrupt_Init(void) {
 }
 
 #include "state.h"
+#include <u8g2.h>
+
+extern u8g2_t u8g2;
 
 void u8g2_setup(void);
 
@@ -92,23 +95,31 @@ int main(void)
 	//OLED_draw_xbm_vertical(&splash_screen_bits[0]);
 
 	// tiny_invaders();
+	u8g2_DrawXBM(&u8g2, 0, 0, 128, 64, splash_screen_bits);
+ 	u8g2_SendBuffer(&u8g2);
 
 	uint8_t ledState = 0;
 	while (1)
 	{
 		if (current_state != next_state) {
+			u8g2_ClearBuffer(&u8g2);
 			switch (next_state) {
 				case STATE_IDLE:
-					OLED_fill(0); // Clear Screen when entering idle state.
+					u8g2_DrawStr(&u8g2,2,30,"IDLE");
 					break;
 				case STATE_SENDING:
+					u8g2_DrawStr(&u8g2,2,30,"TX");
 					break;
 				case STATE_RECEIVING:
+					u8g2_DrawStr(&u8g2,2,30,"RX");
 					break;
 				case STATE_GAME:
+					u8g2_DrawStr(&u8g2,2,30,"GAME");
+
 					//tiny_invaders();
 					break;
 			}
+ 			u8g2_SendBuffer(&u8g2);
 			current_state = next_state;
 		}
 		switch (current_state) {
