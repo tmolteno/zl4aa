@@ -44,6 +44,14 @@ void AudioShutdown(void) {
     GPIO_WriteBit(AUDIO_SHUTDOWN_PORT, AUDIO_SHUTDOWN_PIN, Bit_SET);
 }
 
+int PTT_Pressed(void) {
+    return GPIO_ReadInputDataBit(PTT_KEY_PORT, PTT_KEY_PIN) == Bit_RESET;
+}
+int Mode_Pressed(void) {
+    return GPIO_ReadInputDataBit(MODE_KEY_PORT, MODE_KEY_PIN) == Bit_RESET;
+}
+
+
 /// @brief 
 /// @param  
 void DAC_Initialize(void) {

@@ -21,17 +21,17 @@ void KEY_Interrupt_Init(void) {
 
 	/* PB9 'MODE' Key */
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO | RCC_APB2Periph_GPIOB, ENABLE);
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
+    GPIO_InitStructure.GPIO_Pin = MODE_KEY_PIN;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOB, &GPIO_InitStructure);
+    GPIO_Init(MODE_KEY_PORT, &GPIO_InitStructure);
 	
 	/* PC8 PTT Key */
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
+    GPIO_InitStructure.GPIO_Pin = PTT_KEY_PIN;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOC, &GPIO_InitStructure);
+    GPIO_Init(PTT_KEY_PORT, &GPIO_InitStructure);
 
     GPIO_EXTILineConfig(GPIO_PortSourceGPIOB, GPIO_PinSource9);
 
@@ -83,6 +83,8 @@ int main(void)
 	DAC_DMA_Init(&DAC_Value[0], N_SAMPLES);
 	DAC_Timer_Init(0x7,24000-1);
 
+    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_RNG, ENABLE);
+	RNG_Cmd(ENABLE);
 
 	Synthesizer_Init(100000, 0x77);
 
@@ -91,10 +93,7 @@ int main(void)
 	OLED_I2C_init();
 
 	u8g2_setup();
-	//OLED_fill(0xFF); // Clear Screen when entering idle state.
-	//OLED_draw_xbm_vertical(&splash_screen_bits[0]);
 
-	// tiny_invaders();
 	u8g2_DrawXBM(&u8g2, 0, 0, 128, 64, splash_screen_bits);
  	u8g2_SendBuffer(&u8g2);
 
@@ -116,7 +115,7 @@ int main(void)
 				case STATE_GAME:
 					u8g2_DrawStr(&u8g2,2,30,"GAME");
 
-					//tiny_invaders();
+					tiny_invaders_setup();
 					break;
 			}
  			u8g2_SendBuffer(&u8g2);
@@ -136,6 +135,8 @@ int main(void)
 			case STATE_RECEIVING:
 				break;
 			case STATE_GAME:
+				tiny_invaders_loop();
+				Delay_Ms(2);
 				break;
 		}
 	}
