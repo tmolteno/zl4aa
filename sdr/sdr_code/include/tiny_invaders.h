@@ -1,1 +1,2 @@
-void tiny_invaders(void);
+void tiny_invaders_setup();
+void tiny_invaders_loop();
